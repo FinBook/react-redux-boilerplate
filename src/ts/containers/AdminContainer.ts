@@ -8,4 +8,7 @@ function mapStateToProps(state: IState) {
 	};
 }
 
-export default connect(mapStateToProps, {})(Admin);
+export default connect(
+	mapStateToProps,
+	{}
+)(Admin);

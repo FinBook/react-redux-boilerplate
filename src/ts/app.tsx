@@ -13,12 +13,12 @@ let promise;
 if (__DEV__) {
 	// Initialize Firebase
 	firebase.initializeApp({
-		apiKey: '',
-		authDomain: '',
-		databaseURL: '',
-		projectId: '',
-		storageBucket: '',
-		messagingSenderId: ''
+		apiKey: 'AIzaSyCzoJURMq3IJ4MEQ48reAlJNEc3B5Q_IgU',
+		authDomain: 'ramiel-dev.firebaseapp.com',
+		databaseURL: 'https://ramiel-dev.firebaseio.com',
+		projectId: 'ramiel-dev',
+		storageBucket: 'ramiel-dev.appspot.com',
+		messagingSenderId: '336513028474'
 	});
 	promise = new Promise(resolve => resolve());
 } else

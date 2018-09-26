@@ -21,6 +21,10 @@ export interface IAdminProps {
 	signedIn: boolean;
 }
 
+export interface IState {
+	result: string
+}
+
 const WebSocket = require('isomorphic-ws');
 
 const ws = new WebSocket(CST.RELAYER_WS_URL);
@@ -41,7 +45,7 @@ let taker = '';
 let exchangeAddress = '';
 const TAKER_ETH_DEPOSIT = 1;
 
-export default class Admin extends React.PureComponent<IAdminProps> {
+export default class Admin extends React.PureComponent<IAdminProps, IState> {
 	private async init() {
 		await assetsUtil.init();
 		taker = assetsUtil.taker;
@@ -71,15 +75,15 @@ export default class Admin extends React.PureComponent<IAdminProps> {
 		await assetsUtil.web3Wrapper.awaitTransactionSuccessAsync(takerWETHDepositTxHash);
 		await assetsUtil.approveAllMakers(zrxTokenAddress);
 
-		ws.onmessage = function incoming(data: MessageEvent) {
-			console.log(data);
-			// result = data.data;
-			setMessage(data.data);
-		};
+		// ws.onmessage = function incoming(data: MessageEvent) {
+		// 	console.log(data);
+		// 	// result = data.data;
+		// 	setMessage(data.data);
+		// };
 
-		function setMessage(e: string) {
-			console.log(e);
-		}
+		// function setMessage(e: string) {
+		// 	console.log(e);
+		// }
 	}
 
 	public componentDidUpdate() {
@@ -150,8 +154,17 @@ export default class Admin extends React.PureComponent<IAdminProps> {
 		this.sendingMessage();
 	}
 
+	public componentDidMount() {
+		ws.onmessage = (event: any) => {
+			this.setState({ result: this.state.result + "\n" + event.data });
+		};
+	}
+
 	constructor(props: IAdminProps) {
 		super(props);
+		this.state = ({
+			result: ''
+		});
 	}
 	public render() {
 		const { signedIn } = this.props;
@@ -169,7 +182,7 @@ export default class Admin extends React.PureComponent<IAdminProps> {
 						<button onClick={() => this.sendingMessageButton()}> WebSocket </button>
 					</p>
 					<div style={{ textAlign: 'center', background: 'white' }}>
-						{/* <h3> {result} </h3> */}
+						<h3> {this.state.result} </h3>
 					</div>
 				</div>
 			</Layout>

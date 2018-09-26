@@ -10,3 +10,18 @@ export interface IState {
 export interface IFirebaseState {
 	readonly auth: boolean;
 }
+
+export interface IWSOrderBook {
+	type: string;
+	channel: {
+		name: string;
+		marketId: string;
+	};
+	changes: [
+		{
+			side: string;
+			price: string;
+			amount: string;
+		}
+	];
+}

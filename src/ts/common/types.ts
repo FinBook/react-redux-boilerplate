@@ -11,12 +11,7 @@ export interface IFirebaseState {
 	readonly auth: boolean;
 }
 
-export interface IWSOrderBook {
-	type: string;
-	channel: {
-		name: string;
-		marketId: string;
-	};
+export interface IWSOrderBook extends IChannel {
 	changes: [
 		{
 			side: string;
@@ -24,4 +19,38 @@ export interface IWSOrderBook {
 			amount: string;
 		}
 	];
+}
+
+export interface IChannel {
+	type: string;
+	channel: {
+		name: string;
+		marketId: string;
+	};
+}
+
+export interface IWSOrderBookSubscription extends IChannel {
+	requestId: number;
+	payload: {
+		bids: [
+			{
+				makerTokenName: string;
+				takerTokenName: string;
+				marketId: string;
+				side: string;
+				amount: number;
+				price: number;
+			}
+		];
+		asks: [
+			{
+				makerTokenName: string;
+				takerTokenName: string;
+				marketId: string;
+				side: string;
+				amount: number;
+				price: number;
+			}
+		];
+	};
 }

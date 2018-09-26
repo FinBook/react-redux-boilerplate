@@ -415,9 +415,10 @@ export const SRadioGroup = styled(RadioGroup as any)`
 
 export interface ICardListProps {
 	noMargin?: boolean;
+	fixWidth?: boolean;
 }
 export const SCardList = styled.div`
-	width: 100%;
+	width: ${(props: ICardListProps) => (props.fixWidth ? '' : '100%')};
 	.status-list-wrapper {
 		width: 100%;
 	}

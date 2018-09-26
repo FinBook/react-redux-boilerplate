@@ -18,11 +18,11 @@ export default class TimeSeriesCard extends React.Component<IProps, IState> {
 
 	public render() {
 		const { orderBook } = this.props;
-		const title = orderBook.type !== "" ? orderBook.type.toUpperCase() + ' ' + orderBook.channel.marketId.toUpperCase() : CST.TH_ORDERBOOK.toUpperCase();
+		const title = CST.TH_ORDERBOOK.toUpperCase();
 		return (
 			<SCard
 				title={<SCardTitle>{title}</SCardTitle>}
-				width="440px"
+				width="340px"
 				margin="0 10px 0 0"
 			>
 				<SDivFlexCenter center horizontal>

@@ -9,6 +9,7 @@ import {
 } from '0x.js';
 import { Web3Wrapper } from '@0xproject/web3-wrapper';
 import { Layout } from 'antd';
+import { Affix } from 'antd';
 import * as React from 'react';
 import assetsUtil from '../assetsUtil';
 import { IWSOrderBook, IWSOrderBookSubscription } from '../common/types';
@@ -77,7 +78,6 @@ export default class Admin extends React.PureComponent<IAdminProps, IState> {
 		);
 		await assetsUtil.web3Wrapper.awaitTransactionSuccessAsync(takerWETHDepositTxHash);
 		await assetsUtil.approveAllMakers(zrxTokenAddress);
-		await this.subscription();
 	}
 
 	public componentDidUpdate() {
@@ -91,7 +91,7 @@ export default class Admin extends React.PureComponent<IAdminProps, IState> {
 	}
 
 	private async subscription() {
-		console.log("subscription");
+		console.log('subscription');
 		const msg = {
 			type: WsChannelMessageTypes.Subscribe,
 			quoteAssetData: makerAssetData,
@@ -164,7 +164,19 @@ export default class Admin extends React.PureComponent<IAdminProps, IState> {
 	}
 
 	public componentDidMount() {
+		const message = {
+			type: WsChannelMessageTypes.Subscribe,
+			quoteAssetData: makerAssetData,
+			baseAssetData: takerAssetData,
+			channel: { name: WsChannelName.Orderbook, marketId: 'ZRX-WETH' },
+			requestId: Date.now()
+		};
+		ws.onopen = function open() {
+			console.log('connected');
+			ws.send(JSON.stringify(message));
+		};
 		ws.onmessage = (event: any) => {
+			console.log(event);
 			const msg = JSON.parse(event.data);
 			this.setState({ result: event.data });
 			if (msg.type === 'subscribe') this.setState({ orderBookSubscription: msg });
@@ -244,11 +256,15 @@ export default class Admin extends React.PureComponent<IAdminProps, IState> {
 						<h3> {this.state.result} </h3>
 					</div> */}
 					<SDivFlexCenter center horizontal>
-						<OrberbookCard orderBook={this.state.orderBook} />
+						<Affix offsetTop={20}>
+							<OrberbookCard orderBook={this.state.orderBook} />
+						</Affix>
 						<OrderbookCardSubscription
 							orderBookSubscription={this.state.orderBookSubscription}
 						/>
-						<OperationCard />
+						<Affix offsetTop={20}>
+							<OperationCard />
+						</Affix>
 					</SDivFlexCenter>
 				</div>
 			</Layout>

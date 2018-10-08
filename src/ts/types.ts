@@ -61,7 +61,7 @@ export enum WsChannelMessageTypes {
 
 export enum WsChannelName {
 	Orderbook = 'orderbook',
-	Orders = 'orders'
+	Order = 'order'
 }
 
 export interface IOrderInfo {

@@ -1,4 +1,11 @@
 export const AC_AUTH = 'auth';
+export const AC_ADD = 'add';
+export const AC_ADD_MSG = 'addMessage';
+export const AC_SUBSCRIBE = 'subscribe';
+export const AC_INITWEB = 'initWeb';
+export const AC_SUBSCRIBEWEB = 'subscribeWebSocket';
+export const AC_SUBSCRIBE_MSG = 'subWSMessage';
+export const AC_UPDATE = 'update';
 
 export const TH_LOGIN = "Admin Login";
 export const TH_LOGOUT = "Log out";

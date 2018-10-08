@@ -17,21 +17,18 @@ interface IState {
 export default class TimeSeriesCard extends React.Component<IProps, IState> {
 	public render() {
 		const { orderBookSubscription } = this.props;
-		console.log(orderBookSubscription);
 		const title = CST.TH_ORDERBOOK.toUpperCase();
 		const askArray: number[][] = [];
 		const bidArray: number[][] = [];
 		const type = orderBookSubscription.type;
-		if (orderBookSubscription && type === "subscribe") {
-			const asks = orderBookSubscription.payload.asks;
-			const bids = orderBookSubscription.payload.bids;
-			console.log(bids);
+		if (orderBookSubscription && type === "update") {
+			const asks = orderBookSubscription.asks;
+			const bids = orderBookSubscription.bids;
 			for (const bid of bids) bidArray.push([bid.amount, bid.price]);
 			for (const ask of asks) askArray.push([ask.amount, ask.price]);
 		}
 		askArray.sort((a, b) => a[0] - b[0]);
 		bidArray.sort((a, b) => b[0] - a[0]);
-		console.log(bidArray);
 		return (
 			<SCard title={<SCardTitle>{title}</SCardTitle>} width="500px" margin="0 10px 0 0">
 				<SDivFlexCenter center horizontal>
@@ -41,7 +38,7 @@ export default class TimeSeriesCard extends React.Component<IProps, IState> {
 								<li className="right">
 									<span className="title">{CST.TH_BID.toUpperCase()}</span>
 								</li>
-								{bidArray.length && type === "subscribe" ? (
+								{bidArray.length ? (
 									util.range(0, bidArray.length).map((i: any) => (
 										<li key={i}>
 											<span className="content">
@@ -84,7 +81,7 @@ export default class TimeSeriesCard extends React.Component<IProps, IState> {
 								<li>
 									<span className="title">{CST.TH_ASK.toUpperCase()}</span>
 								</li>
-								{askArray.length && type === "subscribe" ? (
+								{askArray.length ? (
 									util.range(0, askArray.length).map((i: any) => (
 										<li key={i}>
 											<span className="title">

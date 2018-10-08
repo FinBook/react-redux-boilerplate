@@ -20,6 +20,11 @@ module.exports = {
 		host: '0.0.0.0',
 		disableHostCheck: true
 	},
+	node: {
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+	},
 	plugins: [
 		new webpack.LoaderOptionsPlugin({
 			debug: true

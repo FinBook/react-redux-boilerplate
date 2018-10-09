@@ -1,7 +1,7 @@
 import {
 	assetDataUtils,
 	BigNumber,
-	ContractWrappers,
+	// ContractWrappers,
 	generatePseudoRandomSalt,
 	Order,
 	orderHashUtils,
@@ -33,7 +33,10 @@ class WSUtil {
 	public async cancelOrder(ws: WebSocket) {
 		await firebaseUtil.init();
 		const marketId = CST.TOKEN_ZRX + '-' + CST.TOKEN_WETH;
-		const orders = await firebaseUtil.getOrders(marketId, '0x7457d5e02197480db681d3fdf256c7aca21bdc12');
+		const orders = await firebaseUtil.getOrders(
+			marketId,
+			'0x7457d5e02197480db681d3fdf256c7aca21bdc12'
+		);
 		if (orders.length === 0) throw Error('No orders found in DB!');
 		console.log('num of fetched orders' + orders.length);
 
@@ -148,43 +151,21 @@ class WSUtil {
 	}
 
 	public async subscription(ws: WebSocket) {
-		const contractWrappers = new ContractWrappers(providerEngine, {
-			networkId: CST.NETWORK_ID_LOCAL
-		});
-
-		// Get token contract addresses
-		const zrxTokenAddress = contractWrappers.exchange.getZRXTokenAddress();
-		const etherTokenAddress = contractWrappers.etherToken.getContractAddressIfExists();
-
-		if (etherTokenAddress === undefined) throw console.error('undefined etherTokenAddress');
-
-		const makerAssetData = assetDataUtils.encodeERC20AssetData(zrxTokenAddress);
-		const takerAssetData = assetDataUtils.encodeERC20AssetData(etherTokenAddress);
-
-		// Generate OrderbookChannelSubscriptionOpts for watching the ZRX/WETH orderbook
-		const zrxWethSubscriptionOpts = {
-			makerAssetData: makerAssetData,
-			takerAssetData: takerAssetData,
-			networkId: 42
-		};
-		console.log(zrxWethSubscriptionOpts);
-
-		ws.onmessage = (event: any) => {
-			console.log(event);
-		};
-
 		const msg = {
 			type: 'subscribe',
 			channel: {
 				name: 'orderbook',
 				marketId: 'ZRX-WETH'
 			},
-			requestId: '1538121710153'
+			requestId: Date.now().toString()
 		};
-		console.log(msg);
-		ws.onopen = function open() {
-			ws.send(JSON.stringify(msg));
-		};
+		if (ws.readyState !== WebSocket.OPEN)
+			ws.onopen = function open() {
+				console.log('Connected');
+				ws.send(JSON.stringify(msg));
+				console.log('hello');
+			};
+		else ws.send(JSON.stringify(msg));
 		util.log('sent subscrible request!');
 	}
 
